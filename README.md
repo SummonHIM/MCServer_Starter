@@ -16,7 +16,9 @@ Other Linux|√|×
 MacOS|?|×
 
 注意：若要将服务器从Windows迁移至Linux，或Linux迁移至Windows。请注意 startconfig.cfg 与 eula.txt 文件的编码。避免造成编码错误导致的脚本错误。若出现编码问题，请尝试转码或删除上述文件。
+
 Bat推荐编码：GBK，行尾：CRLF
+
 Sh推荐编码：UTF-8，行尾：LF
 ## 启动 Debug 模式
 
