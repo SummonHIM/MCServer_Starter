@@ -20,9 +20,9 @@ echo      [3] 服务器额外参数（可选）：%setExtraJavaArgs%
 echo      [4] 自定义 Java 路径（可选）：%set3rdJavaPath%
 echo      [5] 保存...
 echo,
-echo      [0] 下载服务端文件
+echo      [Z] 下载服务端文件
 echo,
-choice /c 123450
+choice /c 12345Z
 set firstConfigChoice=%errorlevel%
 if %firstConfigChoice%==1 (
 	echo,
@@ -271,45 +271,54 @@ exit
 title Minecraft 服务端启动器 %mainVersion% - 下载服务端
 cls
 echo --------------- 请选择欲下载的服务端类型... ---------------
-echo      [1] 原版 (BMCLAPI)
-echo      Bukkit
-echo      --- [2] Spigot
-echo      --- [3] PaperMC
-echo      --- [4] TacoSpigot
-echo      --- [5] Purpur
-echo      --- [6] Mohist
-echo      Sponge
-echo      --- [7] SpongeVanilla
-echo      --- [8] SpongeForge
+echo 提示：下载引擎所使用的 PowerShell Invoke-WebRequest 命令可能会触发杀毒软件的拦截。
 echo,
-echo      [0] 返回启动配置
-choice /c 123456780
+echo      [1] 原版 (BMCLAPI)
+echo      [2] Forge
+echo      [3] Bukkit
+echo      --- [4] Spigot
+echo      --- [5] PaperMC
+echo      --- [6] TacoSpigot
+echo      --- [7] Purpur
+echo      --- [8] Mohist
+echo      Sponge
+echo      --- [9] SpongeVanilla
+echo      --- [0] SpongeForge
+echo,
+echo      [Z] 返回启动配置
+choice /c 1234567890Z
 set downloadMenuChoice=%errorlevel%
 if %downloadMenuChoice%==1 (
 	goto vainllaConfigs
 )
 if %downloadMenuChoice%==2 (
-	goto spigotConfigs
+	goto forgeConfigs
 )
 if %downloadMenuChoice%==3 (
-	goto paperConfigs
+	goto bukkitConfigs
 )
 if %downloadMenuChoice%==4 (
-	goto tacoSpigotConfigs
+	goto spigotConfigs
 )
 if %downloadMenuChoice%==5 (
-	goto purpurConfigs
+	goto paperConfigs
 )
 if %downloadMenuChoice%==6 (
-	goto mohistConfigs
+	goto tacoSpigotConfigs
 )
 if %downloadMenuChoice%==7 (
-	goto spongeVanillaConfigs
+	goto purpurConfigs
 )
 if %downloadMenuChoice%==8 (
-	goto spongeForgeConfigs
+	goto mohistConfigs
 )
 if %downloadMenuChoice%==9 (
+	goto spongeVanillaConfigs
+)
+if %downloadMenuChoice%==10 (
+	goto spongeForgeConfigs
+)
+if %downloadMenuChoice%==11 (
 	goto firstConfig
 )
 
@@ -318,6 +327,26 @@ echo,
 set /p downloadVersion=请输入欲下载的 Java 服务端版本号（如1.7.10）：
 set downloadAPIUrls=https://bmclapi2.bangbang93.com/version/%downloadVersion%/server
 set downloadFileName=minecraft_server
+goto apiDownload
+
+:forgeConfigs
+echo,
+set /p downloadVainllaVersion=请输入欲下载的 Java 服务端版本号（如1.12.2）：
+echo 请输入欲下载的 Forge 安装包版本号（如14.23.5.2855）
+set /p downloadVersion=留空则前去浏览器查看支持的版本号：
+if "%downloadVersion%"=="" ( 
+	start https://files.minecraftforge.net/net/minecraftforge/forge/index_%downloadVainllaVersion%.html
+	goto downloadMenu
+)
+set downloadAPIUrls=https://maven.minecraftforge.net/net/minecraftforge/forge/%downloadVainllaVersion%-%downloadVersion%/forge-%downloadVainllaVersion%-%downloadVersion%-installer.jar
+set downloadFileName=forge-installer-%downloadVainllaVersion%
+goto apiDownload
+
+:bukkitConfigs
+echo,
+set /p downloadVersion=请输入欲下载的 Java 服务端版本号（如1.7.10）：
+set downloadAPIUrls=https://download.getbukkit.org/craftbukkit/craftbukkit-%downloadVersion%.jar
+set downloadFileName=Craftbukkit
 goto apiDownload
 
 :spigotConfigs
@@ -337,7 +366,7 @@ set /p downloadVainllaVersion=请输入欲下载的 Java 服务端版本号（如1.12.2）：
 echo 请输入欲下载的 PaperMC 服务端构建编号（如130）
 set /p downloadVersion=留空则前去浏览器查看支持的构建编号：
 if "%downloadVersion%"=="" ( 
-	start https://papermc.io/api/v2/projects/paper/versions/%downloadVainllaVersion%
+	start https://papermc.io/downloads
 	goto downloadMenu
 )
 set downloadAPIUrls=https://papermc.io/api/v2/projects/paper/versions/%downloadVainllaVersion%/builds/%downloadVersion%/downloads/paper-%downloadVainllaVersion%-%downloadVersion%.jar
