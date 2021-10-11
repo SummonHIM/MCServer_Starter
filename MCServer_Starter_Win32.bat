@@ -393,7 +393,7 @@ goto apiDownload
 echo,
 echo 正在下载中，请稍后...
 echo 地址：%downloadAPIUrls%，保存至：%downloadFileName%-%downloadVersion%.jar
-certutil -urlcache -split -f %downloadAPIUrls%  %downloadFileName%-%downloadVersion%.jar >nul
+powershell Invoke-WebRequest "%downloadAPIUrls%" -OutFile "%downloadFileName%-%downloadVersion%.jar"
 echo,
 for /f %%a in (%downloadFileName%-%downloadVersion%.jar) do (
 	set downloadStatus=%%a
